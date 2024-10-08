@@ -115,36 +115,9 @@ const Register = () => {
   return (
     <Col lg="6" md="8">
       <Card className="bg-secondary shadow border-0">
-        <CardHeader className="bg-transparent pb-5">
-          <div className="text-muted text-center mt-2 mb-3">
-            <small>Sign in with</small>
-          </div>
-          <div className="btn-wrapper text-center">
-
-            <Button
-              className="btn-neutral btn-icon"
-              color="default"
-
-            >
-              <span className="btn-inner--icon">
-
-                <img
-                  alt="..."
-                  src={
-                    require("../../../assets/img/icons/common/google.svg")
-                      .default
-                  }
-
-                />
-              </span>
-              <span className="btn-inner--text">Google</span>
-            </Button>
-          </div>
-        </CardHeader>
+        
         <CardBody className="px-lg-5 py-lg-5">
-          <div className="text-center text-muted mb-4">
-            <small>Or sign up with credentials</small>
-          </div>
+          
           <Form role="form" onSubmit={handleSubmit}>
             {error && (
               <div className="text-center text-danger mb-4">
@@ -210,7 +183,7 @@ const Register = () => {
                   </InputGroupText>
                 </InputGroupAddon>
                 <Input
-                  placeholder="Password"
+                  placeholder="Mot de passe"
                   type="password"
                   name="password"
                   value={formData.password}
@@ -221,40 +194,16 @@ const Register = () => {
             </FormGroup>
             <div className="text-muted font-italic">
               <small>
-                Password strength:{" "}
+              Force du mot de passe:{" "}
                 <span className={`font-weight-700 ${getPasswordStrengthColor()}`}>
                   {passwordStrength.toUpperCase()}
                 </span>
               </small>
             </div>
-            <Row className="my-4">
-              <Col xs="12">
-                <div className="custom-control custom-control-alternative custom-checkbox">
-                  <input
-                    className="custom-control-input"
-                    id="customCheckRegister"
-                    type="checkbox"
-                  />
-                  <label
-                    className="custom-control-label"
-                    htmlFor="customCheckRegister"
-                  >
-                    <span className="text-muted">
-                      I agree with the{" "}
-                      <a
-                        href="#pablo"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        Privacy Policy
-                      </a>
-                    </span>
-                  </label>
-                </div>
-              </Col>
-            </Row>
+            
             <div className="text-center">
               <Button className="mt-4" color="primary" type="submit">
-                Create account
+                Créer un compte
               </Button>
             </div>
           </Form>
@@ -263,7 +212,7 @@ const Register = () => {
       </Card>
       <Col className="text-center mt-4">
         <Link className="text-light" to="/auth/login">
-          <small>Sign in</small>
+          <small>Se connecter</small>
         </Link>
       </Col>
     </Col>

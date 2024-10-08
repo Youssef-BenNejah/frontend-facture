@@ -70,35 +70,9 @@ const Login = () => {
     <>
       <Col lg="5" md="7">
         <Card className="bg-secondary shadow border-0">
-          <CardHeader className="bg-transparent pb-5">
-            <div className="text-muted text-center mt-2 mb-3">
-              <small>Sign in with</small>
-            </div>
-            <div className="btn-wrapper text-center">
-
-              <Button
-                className="btn-neutral btn-icon"
-                color="default"
-                href="#pablo"
-                onClick={googleAuth}
-              >
-                <span className="btn-inner--icon">
-                  <img
-                    alt="..."
-                    src={
-                      require("../../../assets/img/icons/common/google.svg")
-                        .default
-                    }
-                  />
-                </span>
-                <span className="btn-inner--text">Google</span>
-              </Button>
-            </div>
-          </CardHeader>
+          
           <CardBody className="px-lg-5 py-lg-5">
-            <div className="text-center text-muted mb-4">
-              <small>Or sign in with credentials</small>
-            </div>
+            
             <Form role="form" onSubmit={handleSubmit}>
               {error && (
                 <div className="text-center text-danger mb-4">
@@ -131,7 +105,7 @@ const Login = () => {
                     </InputGroupText>
                   </InputGroupAddon>
                   <Input
-                    placeholder="Password"
+                    placeholder="Mot de passe"
                     type="password"
                     name="password"
                     value={formData.password}
@@ -147,16 +121,11 @@ const Login = () => {
                   id=" customCheckLogin"
                   type="checkbox"
                 />
-                <label
-                  className="custom-control-label"
-                  htmlFor=" customCheckLogin"
-                >
-                  <span className="text-muted">Remember me</span>
-                </label>
+                
               </div>
               <div className="text-center">
                 <Button className="my-4" color="primary" type="submit">
-                  Sign in
+                  Se connecter
                 </Button>
               </div>
             </Form>
@@ -166,13 +135,13 @@ const Login = () => {
 
           <Col xs="6">
             <Link className="text-light" to="/password-reset/forgot-password">
-              <small>Forgot password?</small>
+              <small>mot de passe oublié?</small>
             </Link>
           </Col>
 
           <Col className="text-right" xs="6">
             <Link className="text-light" to="/auth/register">
-              <small>Create new account</small>
+              <small>Créer un compte</small>
             </Link>
           </Col>
         </Row>

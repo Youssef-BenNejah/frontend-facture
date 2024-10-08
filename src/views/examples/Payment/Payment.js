@@ -235,7 +235,7 @@ const PaymentHistory = () => {
                 return 'success';
             case 'impayé':
                 return 'danger';
-            case 'Partially Payé':
+            case 'Partiellement payé':
                 return 'info';
             case 'Retard':
                 return 'warning';
