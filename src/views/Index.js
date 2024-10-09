@@ -90,8 +90,22 @@ const Index = () => {
           );
         })
         .reduce((total, invoice) => total + invoice.total, 0);
-
       setTotalUnpaid(totalUnpaidAmount);
+
+      const totalPaidAmount = invoicesData
+        .filter(invoice => {
+          const invoiceDate = new Date(invoice.date);
+          return (
+            invoice?.type === 'Standard' &&
+            invoice?.paymentStatus === "Payé" &&
+            invoice?.currency?._id === selectedCurrency?._id &&
+            invoiceDate.getMonth() + 1 === currentMonth &&
+            invoiceDate.getFullYear() === currentYear
+          );
+        })
+        .reduce((total, invoice) => total + invoice.total, 0);
+        console.log(invoicesData)
+        setTotalPaid(totalPaidAmount);
 
       const totalProformaAmount = invoicesData
         .filter(invoice => {
@@ -123,8 +137,7 @@ const Index = () => {
 
 
 
-  //console.log("all",invoices)
-  //console.log("filtred",filteredInvoices)
+
 
   const getCurrencyByInvoiceId = (id) => {
     const invoice = filteredInvoices.find(invoice => invoice._id === id);
@@ -317,8 +330,7 @@ const Index = () => {
         );
       });
       const paymentsByCurrency = paymentsThisMonth.reduce((acc, payment) => {
-        const currencyId =selectedCurrency._id;
-        console.log(selectedCurrency)
+        const currencyId = selectedCurrency._id;
         const x = Draftstatuspercentage();
         console.log(x)
         if (!currencyId) {
@@ -457,9 +469,7 @@ const Index = () => {
                         Factures payées
                         </CardTitle>
                         <Badge color="success" style={{ fontSize: "20px" }}>
-                          {selectedCurrency && payments[selectedCurrency._id] !== undefined
-                            ? getCurrencySymbolById(selectedCurrency._id, payments[selectedCurrency._id])
-                            : "0.00"}
+                        {selectedCurrency ? getCurrencySymbolById(selectedCurrency._id, totalPaid) : "0.00"}
                         </Badge>
                       </div>
                       <Col className="col-auto">
