@@ -80,7 +80,7 @@ const AddProformaInvoice = ({ isOpen, toggle, refreshInvoices, userId }) => {
         const fetchCurrencies = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/currency', {
-                    params: { createdBy: userId, active: true }
+                    params: { createdBy: userId }
                 });
                 setCurrencyOptions(response.data.map(currency => ({
                     value: currency._id,

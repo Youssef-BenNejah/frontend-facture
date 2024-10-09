@@ -54,7 +54,7 @@ const Index = () => {
         params: { createdBy: currentUserId },
         headers: { Authorization: `Bearer ${token}` },
       });
-      setCurrencies(currencyResponse.data.filter(currency => currency.active));
+      setCurrencies(currencyResponse.data);
 
 
 

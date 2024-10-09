@@ -294,7 +294,7 @@ const ProformaInvoice = () => {
                                             <th scope="col">Client</th>
                                             <th scope="col">Date</th>
                                             <th scope="col">Total</th>
-                                            <th scope="col">Payé</th>
+                                                {/* <th scope="col">Payé</th> */}
                                             <th scope="col">Status</th>
                                             <th scope="col">paiement</th>
 
@@ -313,9 +313,9 @@ const ProformaInvoice = () => {
                                                     <td>{getClientNameById(invoice.client._id)}</td>
                                                     <td>{new Date(invoice.date).toLocaleDateString()}</td>
                                                     <td>
-                                                        {invoice.currency ? getCurrencySymbolById(invoice.currency._id, invoice.total) : 'Devise non trouvée'}
+                                                        { invoice.total}
                                                     </td>
-                                                    <td> {invoice.currency ? getCurrencySymbolById(invoice.currency._id, invoice.paidAmount) : 'Devise non trouvée'}</td>
+                                                    {/* <td> {invoice.currency ? getCurrencySymbolById(invoice.currency._id, invoice.paidAmount) : 'Devise non trouvée'}</td> */}
 
 
 

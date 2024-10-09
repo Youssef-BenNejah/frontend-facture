@@ -101,7 +101,6 @@ const AddProduct = ({ isOpen, toggle, refreshProducts, userId }) => {
               >
                 <option value="" disabled>Sélectionnez une devise</option>
                 {currencies
-                  .filter((currency) => currency.active) // Ensure only active currencies are displayed
                   .map((currency) => (
                     <option key={currency._id} value={currency._id}>
                       {currency.name} ({currency.code})
