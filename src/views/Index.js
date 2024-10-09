@@ -83,7 +83,7 @@ const Index = () => {
           const invoiceDate = new Date(invoice.date);
           return (
             invoice?.type === 'Standard' &&
-            invoice?.paymentStatus === "Unpaid" &&
+            invoice?.paymentStatus === "impayé" &&
             invoice?.currency?._id === selectedCurrency?._id &&
             invoiceDate.getMonth() + 1 === currentMonth &&
             invoiceDate.getFullYear() === currentYear
@@ -309,6 +309,7 @@ const Index = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const paymentsThisMonth = paymentResponse.data.filter(payment => {
+        
         const paymentDate = new Date(payment.paymentDate);
         return (
           paymentDate.getMonth() + 1 === currentMonth &&
@@ -316,7 +317,8 @@ const Index = () => {
         );
       });
       const paymentsByCurrency = paymentsThisMonth.reduce((acc, payment) => {
-        const currencyId = getCurrencyByInvoiceId(payment.invoice);
+        const currencyId =selectedCurrency._id;
+        console.log(selectedCurrency)
         const x = Draftstatuspercentage();
         console.log(x)
         if (!currencyId) {
@@ -650,7 +652,7 @@ const Index = () => {
                 </thead>
                 <tbody>
                   {filteredStandardInvoices.length > 0 ? (
-                    filteredStandardInvoices.map((invoice) => (
+                    filteredStandardInvoices.slice(5).map((invoice) => (
                       <tr key={invoice._id}>
                         <td>{invoice.number}</td>
                         <td>{getClientNameById(invoice.client._id)}</td>
@@ -714,8 +716,10 @@ const Index = () => {
                   </tr>
                 </thead>
                 <tbody>
+                 
                   {filteredProformaInvoices.length > 0 ? (
-                    filteredProformaInvoices.map((invoice) => (
+                    filteredProformaInvoices.slice(5).map((invoice) => (
+                      
                       <tr key={invoice._id}>
                         <td>{invoice.number}</td>
                         <td>{getClientNameById(invoice.client._id)}</td>
