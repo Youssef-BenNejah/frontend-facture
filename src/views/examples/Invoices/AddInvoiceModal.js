@@ -158,6 +158,20 @@ const AddInvoiceModal = ({ isOpen, toggle, refreshInvoices, userId }) => {
                 draggable: true,
                 progress: undefined,
             });
+    
+            // Reset the invoice state to its initial values
+            setInvoice({
+                // Replace with your initial state structure
+                client: '',
+                number: 1,
+                year: new Date().getFullYear(),
+                currency: '',
+                status: 'Brouillon',
+                date: new Date().toISOString().substring(0, 10),
+                note: '',
+                items: [{ article: '', description: '', quantity: 1, price: 0, total: 0 }],
+            });
+    
             refreshInvoices();
             toggle();
         } catch (error) {
@@ -184,6 +198,7 @@ const AddInvoiceModal = ({ isOpen, toggle, refreshInvoices, userId }) => {
             }
         }
     };
+    
 
     const handleProductChange = (index, selectedOption) => {
         const newItems = [...invoice.items];

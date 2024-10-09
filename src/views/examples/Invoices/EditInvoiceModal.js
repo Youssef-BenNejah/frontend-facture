@@ -24,7 +24,7 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
         date: new Date().toISOString().substring(0, 10),
         note: '',
         items: [{ article: '', description: '', quantity: 1, price: 0, total: 0 }],
-        PayéAmount: 0,
+        paidAmount: 0,
     });
 
 
@@ -84,7 +84,7 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
         const fetchCurrencies = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/currency', {
-                    params: { createdBy: userId  }
+                    params: { createdBy: userId }
                 });
                 setCurrencyOptions(response.data.map(currency => ({
                     value: currency._id,
@@ -93,12 +93,15 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
             } catch (error) {
                 console.error("Error fetching currencies:", error);
             }
+            console.log(invoiceData)
         };
 
-        fetchTaxes();
         fetchClients();
-        fetchProducts();
         fetchCurrencies();
+
+        fetchProducts();
+        fetchTaxes();
+
     }, [userId]);
 
     useEffect(() => {
@@ -139,7 +142,6 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
     };
 
     useEffect(() => {
-        console.log(invoice.PayéAmount)
         const subtotal = calculateSubtotal();
         const selectedTaxOption = taxOptions.find(tax => tax.value === selectedTax);
         const calculatedTax = selectedTaxOption ? (subtotal * parseFloat(selectedTaxOption.label.split(' - ')[1])) / 100 : 0;
@@ -157,11 +159,11 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
                 total: invoiceTotal,
                 createdBy: userId
             };
-    
-            let paymentStatus = invoice.PayéAmount >= payload.total ? 'Payé' : 'impayé';
-    
+
+            let paymentStatus = invoice.paidAmount >= payload.total ? 'Payé' : 'impayé';
+
             await axios.put(`http://localhost:5000/api/invoices/${invoice._id}`, payload);
-    
+
             if (paymentStatus === 'impayé') {
                 await axios.put(`http://localhost:5000/api/invoices/${invoice._id}`, {
                     paymentStatus: paymentStatus
@@ -171,7 +173,7 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
                     }
                 });
             }
-    
+
             toast.success('Facture mise à jour avec succès', {
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -184,7 +186,7 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
             toggle();
         } catch (error) {
             console.error("Error updating invoice:", error);
-    
+
             if (error.response && error.response.status === 400) {
                 toast.error('Le numéro de facture existe déjà. Veuillez utiliser un numéro unique.', {
                     autoClose: 3000,
@@ -232,7 +234,13 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
             console.error("Error fetching products:", error);
         }
     };
+    useEffect(() => {
+        if (invoiceData) {
+            setInvoice(invoiceData);
 
+        }
+        console.log(invoiceData)
+    }, [invoiceData]);
     return (
         <Modal isOpen={isOpen} toggle={toggle} size="lg">
             <ModalHeader toggle={toggle}>Modifier facture</ModalHeader>
@@ -245,10 +253,12 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
                                 type="select"
                                 name="client"
                                 id="client"
-                                value={invoice.client}
+                                value={invoice.client} // This should match the selected client's value
                                 onChange={handleInputChange}
                             >
-                                <option value="">Select Client</option>
+                                <option value="">{invoice.client.type === 'Person'
+                                    ? `${invoice.client.person.prenom} ${invoice.client.person.nom} `
+                                    : `${invoice.client.entreprise}`}</option>
                                 {clientOptions.map((option) => (
                                     <option key={option.value} value={option.value}>
                                         {option.label}
@@ -257,6 +267,8 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
                             </Input>
                         </FormGroup>
                     </Col>
+
+
                     <Col md={3}>
                         <FormGroup>
                             <Label for="number">Number</Label>
@@ -290,11 +302,13 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
                                 type="date"
                                 name="date"
                                 id="date"
-                                value={invoice.date}
+                                value={invoice.date || ''} // Use invoice.date or empty string if it's not set
                                 onChange={handleInputChange}
+
                             />
                         </FormGroup>
                     </Col>
+
                     <Col md={6}>
                         <FormGroup>
                             <Label for="status">Status</Label>
@@ -325,7 +339,7 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
                                 value={invoice.currency}
                                 onChange={handleInputChange}
                             >
-                                <option value="">Select Currency</option>
+                                <option value="">{invoice.currency.code} - {invoice.currency.name}</option>
                                 {currencyOptions.map((option) => (
                                     <option key={option.value} value={option.value}>
                                         {option.label}
@@ -358,7 +372,7 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
                                     id={`product-${index}`}
                                     onChange={(e) => handleProductChange(index, productOptions.find(option => option.value === e.target.value))}
                                 >
-                                    <option value="">Selectionnez un service</option>
+                                    <option value="">{invoice.items[index].article}</option>
                                     {productOptions.map(option => (
                                         <option key={option.value} value={option.value}>
                                             {option.label}
@@ -413,7 +427,7 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
                                 value={selectedTax}
                                 onChange={handleTaxChange}
                             >
-
+                                <option>{selectedTax.value}%</option>
                                 {taxOptions.map((tax) => (
                                     <option key={tax.value} value={tax.value}>
                                         {tax.label}

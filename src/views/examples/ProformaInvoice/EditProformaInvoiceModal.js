@@ -234,7 +234,9 @@ const EditProformaInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices
                                 value={invoice.client}
                                 onChange={handleInputChange}
                             >
-                                <option value="">Select Client</option>
+                                <option value="">{invoice.client.type === 'Person'
+                                    ? `${invoice.client.person.prenom} ${invoice.client.person.nom} `
+                                    : `${invoice.client.entreprise}`}</option>
                                 {clientOptions.map((option) => (
                                     <option key={option.value} value={option.value}>
                                         {option.label}
@@ -310,7 +312,7 @@ const EditProformaInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices
                                 value={invoice.currency}
                                 onChange={handleInputChange}
                             >
-                                <option value="">Select Currency</option>
+                                <option value="">{invoice.currency.code} - {invoice.currency.name}</option>
                                 {currencyOptions.map((option) => (
                                     <option key={option.value} value={option.value}>
                                         {option.label}
@@ -343,7 +345,7 @@ const EditProformaInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices
                                     id={`product-${index}`}
                                     onChange={(e) => handleProductChange(index, productOptions.find(option => option.value === e.target.value))}
                                 >
-                                    <option value="">Selectionnez un service</option>
+                                    <option value="">{invoice.items[index].article}</option>
                                     {productOptions.map(option => (
                                         <option key={option.value} value={option.value}>
                                             {option.label}
@@ -398,7 +400,7 @@ const EditProformaInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices
                                 value={selectedTax}
                                 onChange={handleTaxChange}
                             >
-                                <option value="">No Tax</option>
+                                <option>{selectedTax.value}%</option>
                                 {taxOptions.map((tax) => (
                                     <option key={tax.value} value={tax.value}>
                                         {tax.label}

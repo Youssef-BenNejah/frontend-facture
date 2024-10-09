@@ -242,7 +242,7 @@ const Products = () => {
                                                     <td>{product.name}</td>
                                                    
                                                     <td>{getCurrencyCodeById(product.currency)}</td>
-                                                    <td>{getCurrencySymbolById(product.currency,product.price)}</td>
+                                                    <td>{product.price}</td>
                                                     <td>{product.description}</td>
                                                     <td>{product.reference}</td>
                                                     <td>
