@@ -154,9 +154,9 @@ const EditProformaInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices
                 total: invoiceTotal,
                 createdBy: userId
             };
-
+    
             await axios.put(`http://localhost:5000/api/invoices/${invoice._id}`, payload);
-            toast.success('Facture  mise à jour avec succès', {
+            toast.success('Facture mise à jour avec succès', {
                 autoClose: 2000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -168,8 +168,29 @@ const EditProformaInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices
             toggle();
         } catch (error) {
             console.error("Erreur lors de la mise à jour de la facture:", error);
+    
+            if (error.response && error.response.status === 400) {
+                toast.error('Le numéro de facture existe déjà. Veuillez utiliser un numéro unique.', {
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            } else {
+                toast.error('Erreur lors de la mise à jour de la facture. Veuillez réessayer plus tard.', {
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
         }
     };
+
     const handleProductChange = (index, selectedOption) => {
         const newItems = [...invoice.items];
         newItems[index] = {

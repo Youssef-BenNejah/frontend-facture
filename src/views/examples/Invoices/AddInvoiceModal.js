@@ -145,10 +145,11 @@ const AddInvoiceModal = ({ isOpen, toggle, refreshInvoices, userId }) => {
                 total: invoiceTotal,
                 createdBy: userId
             };
-
+    
             console.log("Payload being sent:", payload);
-
+    
             await axios.post('http://localhost:5000/api/invoices', payload);
+    
             toast.success('Invoice added successfully', {
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -161,6 +162,26 @@ const AddInvoiceModal = ({ isOpen, toggle, refreshInvoices, userId }) => {
             toggle();
         } catch (error) {
             console.error("Error saving invoice:", error);
+    
+            if (error.response && error.response.status === 400) {
+                toast.error('Invoice number already exists. Please use a unique number.', {
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            } else {
+                toast.error('Error saving invoice. Please try again later.', {
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
         }
     };
 

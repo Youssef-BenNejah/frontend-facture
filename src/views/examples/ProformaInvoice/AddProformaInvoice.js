@@ -145,11 +145,11 @@ const AddProformaInvoice = ({ isOpen, toggle, refreshInvoices, userId }) => {
                 total: invoiceTotal,
                 createdBy: userId
             };
-
+    
             console.log("Payload being sent:", payload);
-
+    
             await axios.post('http://localhost:5000/api/invoices', payload);
-            toast.success('Facture ajouté avec succés', {
+            toast.success('Facture ajoutée avec succès', {
                 autoClose: 2000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -161,6 +161,26 @@ const AddProformaInvoice = ({ isOpen, toggle, refreshInvoices, userId }) => {
             toggle();
         } catch (error) {
             console.error("Erreur lors de l'enregistrement de la facture:", error);
+    
+            if (error.response && error.response.status === 400) {
+                toast.error('Le numéro de facture existe déjà. Veuillez utiliser un numéro unique.', {
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            } else {
+                toast.error('Erreur lors de l\'enregistrement de la facture. Veuillez réessayer plus tard.', {
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
         }
     };
     const handleProductChange = (index, selectedOption) => {

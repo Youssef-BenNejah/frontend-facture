@@ -157,11 +157,11 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
                 total: invoiceTotal,
                 createdBy: userId
             };
-
+    
             let paymentStatus = invoice.PayéAmount >= payload.total ? 'Payé' : 'impayé';
-
+    
             await axios.put(`http://localhost:5000/api/invoices/${invoice._id}`, payload);
-
+    
             if (paymentStatus === 'impayé') {
                 await axios.put(`http://localhost:5000/api/invoices/${invoice._id}`, {
                     paymentStatus: paymentStatus
@@ -171,7 +171,7 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
                     }
                 });
             }
-
+    
             toast.success('Facture mise à jour avec succès', {
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -184,6 +184,26 @@ const EditInvoiceModal = ({ isOpen, toggle, invoiceData, refreshInvoices, userId
             toggle();
         } catch (error) {
             console.error("Error updating invoice:", error);
+    
+            if (error.response && error.response.status === 400) {
+                toast.error('Le numéro de facture existe déjà. Veuillez utiliser un numéro unique.', {
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            } else {
+                toast.error('Erreur lors de la mise à jour de la facture. Veuillez réessayer plus tard.', {
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
         }
     };
     const handleProductChange = (index, selectedOption) => {
